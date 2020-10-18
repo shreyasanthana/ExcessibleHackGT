@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Search Pagination</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAko9jE209ok01OHYMb2oyYwc-p1I_fCcA&callback=initMap&libraries=places&type=grocery&v=weekly"
+      defer
+    ></script>
+    <style type="text/css">
+
+      #map {
+        height: 100%;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #right-panel {
+        font-family: "Roboto", "sans-serif";
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select,
+      #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+
+      #right-panel {
+        font-family: Arial, Helvetica, sans-serif;
+        position: absolute;
+        right: 5px;
+        top: 60%;
+        margin-top: -195px;
+        height: 330px;
+        width: 200px;
+        padding: 5px;
+        z-index: 5;
+        border: 1px solid #999;
+        background: #fff;
+      }
+
+      h2 {
+        font-size: 22px;
+        margin: 0 0 5px 0;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 271px;
+        width: 200px;
+        overflow-y: scroll;
+      }
+
+      li {
+        background-color: #f1f1f1;
+        padding: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      li:nth-child(odd) {
+        background-color: #fcfcfc;
+      }
+
+      #more {
+        width: 100%;
+        margin: 5px 0 0 0;
+      }
+    </style>
+    <script>
+
+    
+      function initMap() {
+  
+        const pyrmont = { lat: 33.7756, lng: -84.3963 };
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: pyrmont,
+          zoom: 17,
+        });
+  
+  
+        const service = new google.maps.places.PlacesService(map);
+        let getNextPage;
+        const moreButton = document.getElementById("more");
+        moreButton.onclick = function () {
+          moreButton.disabled = true;
+
+          if (getNextPage) {
+            getNextPage();
+          }
+        };
+
+        service.nearbySearch(
+
+          { location: pyrmont, radius: 500000, type: "supermarket"},
+          (results, status, pagination) => {
+            if (status !== "OK") return;
+            for(var i = 0; i<results.length; i++) {
+              console.log(results[i]);
+            }
+            createMarkers(results, map);
+            moreButton.disabled = !pagination.hasNextPage;
+
+            if (pagination.hasNextPage) {
+              getNextPage = pagination.nextPage;
+            }
+          }
+        );
+      
+
+
+
+    var locations = [
+    ['Atlanta Community Food Bank', 33.664500, -84.494350],
+    ['Prosperity Acfb', 33.785200, -84.426620],
+    ['Fountain of Hope, Inc.', 33.777730, -84.451530],
+    ['Food Distribution Center - Atlanta Union Mission', 33.780140, -84.410010],
+    ['Food Distrubtion - Making A Way Housing', 33.765590, -84.452910]
+  ];
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {
+      if((i+1) % 2 == 1){
+        marker = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        animation: google.maps.Animation.BOUNCE,
+        icon: "https://i.ibb.co/WHy9N1b/Webp-net-resizeimage-5.png"
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      }
+      else {
+        marker = new google.maps.Marker({
+        map: map,
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        animation: google.maps.Animation.BOUNCE,
+        icon: "https://i.ibb.co/WVwQCnG/Webp-net-resizeimage-4.png"
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+      }
+
+      
+
+}
+      
+          }
+ 
+function createMarker(place){
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map:map,
+        position: place.geometry.location,
+        animation: google.maps.Animation.BOUNCE,
+        icon: "https://i.ibb.co/wWgMhmc/Webp-net-resizeimage-3.png"
+      });
+    }
+
+function createBankMarker(place){
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map:map,
+        position: place.geometry.location,
+        animation: google.maps.Animation.BOUNCE,
+        icon: "https://i.ibb.co/fkp4XjH/distribution.png"
+      });
+    }    
+
+
+      function createMarkers(places, map) {
+        const bounds = new google.maps.LatLngBounds();
+        const placesList = document.getElementById("places");
+
+        for (let i = 0, place; (place = places[i]); i++) {
+          const image = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+          new google.maps.Marker({
+            map,
+            animation: google.maps.Animation.BOUNCE,
+            icon: "https://i.ibb.co/kg5tpT8/Webp-net-resizeimage-2.png",
+            title: place.name,
+            position: place.geometry.location,
+          });
+          const li = document.createElement("li");
+          li.textContent = place.name;
+          placesList.appendChild(li);
+          bounds.extend(place.geometry.location);
+        }
+        map.fitBounds(bounds);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="right-panel">
+      <h2>Grocery Stores Near Me</h2>
+      <ul id="places"></ul>
+      <button id="more"></button>
+    </div>
+  </body>
+</html>
