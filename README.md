@@ -1,3 +1,17 @@
+## Description
+Within the past year, food banks across the country have reported a 40% increase in the need for emergency food assistance. To help cater to this need, we thought of Excessible. Excessible allows food banks to send a request to a grocery of items that they are need of or allow a grocery store to send an announcement of food they are no longer in need of. Based on their inventory, the grocery store or food bank can choose to accept the request , and the foodbank can pick it up from its nearest one. To do this, we have provided a map that the food bank/grocery store can look at and decide which to choose.To build our platform we used JavaScript, HTML, React,
+Firestone and Google APIs. 
+
+## Challenges we ran into
+While coding, we ran into many problems with getting the API to function exactly in the way that we wanted. There were numerous bugs and default settings that hindered our progress, but we were eventually able to overcome them through much debugging. We are proud that we were able to work through our bugs, especially on the back-end with saving user information, and logging it. This took us a long time to maneuver and understand, so we are really happy that we ended up getting it to work. On the Google Maps front, we learned how to load and integrate 
+
+## Future steps
+Since surplus items are contingent on expiration dates, we want to include an object detection framework to label different grocery items and keep track of expiration dates in our database. In addition, merging trips to/from food banks by optimizing delivery times would help reduce the number of trips and save on CO2 emissions. Lastly, if independent donors want to get involved, they can keep track of their receipts with an embedded scanning application.
+
+
+## Set up and Scripts
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
